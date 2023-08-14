@@ -1,6 +1,9 @@
 # Spring MediatR Library
 
 ![](https://github.com/AnirudhPandita2020/spring-mediatr/actions/workflows/mediatr-min.yml/badge.svg)
+![LINE](https://img.shields.io/badge/line--coverage-56.10%25-orange.svg)
+![BRANCH](https://img.shields.io/badge/branch--coverage-37.50%25-red.svg)
+![COMPLEXITY](https://img.shields.io/badge/complexity-2.46-brightgreen.svg)
 
 The Spring MediatR Library is a simple implementation of the [MediatR](https://github.com/jbogard/MediatR) pattern for
 Spring applications, designed for versions above 2.7.14. It facilitates efficient communication between components in a
