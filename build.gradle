@@ -81,6 +81,7 @@ tasks.register("printLineCoverage") {
 test {
     finalizedBy jacocoTestReport
 }
+
 jacocoTestReport {
     dependsOn test
 }
@@ -95,6 +96,7 @@ jacocoTestReport {
         csv.required = false
         html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
     }
+    finalizedBy generateJacocoBadge
 }
 
 jacocoBadgeGenSetting {
