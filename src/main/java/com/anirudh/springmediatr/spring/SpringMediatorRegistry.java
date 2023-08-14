@@ -7,6 +7,8 @@ import com.anirudh.springmediatr.core.mediatr.Command;
 import com.anirudh.springmediatr.core.mediatr.CommandHandler;
 import com.anirudh.springmediatr.core.mediatr.Query;
 import com.anirudh.springmediatr.core.mediatr.QueryHandler;
+import com.anirudh.springmediatr.core.notification.Event;
+import com.anirudh.springmediatr.core.notification.NotificationHandler;
 import com.anirudh.springmediatr.core.registry.MediatorRegistry;
 import jdk.jfr.Experimental;
 import lombok.RequiredArgsConstructor;
@@ -15,9 +17,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.core.GenericTypeResolver;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Spring component that manages registration, retrieval, and clearing of request handlers.
@@ -38,6 +38,7 @@ class SpringMediatorRegistry implements MediatorRegistry {
 
     private final Map<Class<? extends Command>, CommandHandler<?>> commandRegistry = new HashMap<>();
     private final Map<Class<? extends Query<?>>, QueryHandler<?, ?>> queryRegistry = new HashMap<>();
+    private final Map<Class<? extends Event>, Set<NotificationHandler<? extends Event>>> notificationRegistry = new HashMap<>();
 
     @Override
     @SuppressWarnings("unchecked")
@@ -64,11 +65,21 @@ class SpringMediatorRegistry implements MediatorRegistry {
         return (QueryHandler<Q, R>) queryRegistry.get(queryClass);
     }
 
+    @Override
+    public <E extends Event> Set<NotificationHandler<? extends Event>> getNotificationHandlers(Class<E> eventClass) {
+        if (!initialized) {
+            configureHandlers();
+        }
+        return notificationRegistry.get(eventClass);
+    }
+
+
     private synchronized void configureHandlers() {
         if (!initialized) {
             log.info("Configuring MediatR lazily: Scanning {} for handlers.", context.getApplicationName());
             loadCommandHandlers();
             loadQueryHandlers();
+            loadNotificationHandlers();
             initialized = true;
             log.info("MediatR configured successfully.");
         }
@@ -118,6 +129,33 @@ class SpringMediatorRegistry implements MediatorRegistry {
             return;
         }
         log.info("MediatR Query Handlers: Scanned and found 0 handlers");
+    }
+
+    @SuppressWarnings("unchecked")
+    private void loadNotificationHandlers() {
+        log.info("MediatR Notification Handlers: Scanning for handlers");
+        var notificationHandlers = context.getBeanNamesForType(NotificationHandler.class);
+        if (notificationHandlers.length > 0) {
+            log.info("MediatR Notification Handlers: Scanned and found {} handlers. Initializing...", notificationHandlers.length);
+            Arrays.stream(notificationHandlers).forEach(notification -> {
+                var handler = (NotificationHandler<?>) context.getBean(notification);
+                var genericType = GenericTypeResolver.resolveTypeArguments(handler.getClass(), NotificationHandler.class);
+                if (genericType != null) {
+                    var eventType = (Class<? extends Event>) genericType[0];
+                    if (notificationRegistry.containsKey(eventType)) {
+                        notificationRegistry.get(eventType).add(handler);
+                    } else {
+                        notificationRegistry.put(eventType, new HashSet<>() {
+                            {
+                                add(handler);
+                            }
+                        });
+                    }
+                    log.info("MediatR Notification Handlers: Added {} for event {}", handler.getClass().getSimpleName(), eventType.getSimpleName());
+                }
+            });
+        }
+        log.info("MediatR Notification Handlers: Scanned and found 0 handlers");
     }
 
     @Override

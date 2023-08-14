@@ -1,5 +1,6 @@
 package com.anirudh.springmediatr.core.mediatr;
 
+import com.anirudh.springmediatr.core.notification.Event;
 import jdk.jfr.Experimental;
 
 /**
@@ -35,4 +36,14 @@ public interface Mediator {
      * @return The response produced by processing the query request.
      */
     <Q extends Query<Response>, Response> Response send(final Q query);
+
+    /**
+     * Publishes an event to the mediator for broadcasting to interested event handlers.
+     *
+     * @param <E>   The specific type of event to be published.
+     * @param event The event instance to be published to the mediator for broadcasting.
+     *              It should implement the {@link Event} interface.
+     */
+    <E extends Event> void publish(final E event);
 }
+
