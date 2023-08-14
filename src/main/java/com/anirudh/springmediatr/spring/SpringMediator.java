@@ -13,8 +13,6 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextClosedEvent;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
 /**
  * Implementation of the {@link Mediator} interface that serves as a central communication hub
  * for handling requests and managing associated handlers.
