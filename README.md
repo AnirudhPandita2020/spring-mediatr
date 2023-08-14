@@ -1,9 +1,9 @@
 # Spring MediatR Library
 
 ![](https://github.com/AnirudhPandita2020/spring-mediatr/actions/workflows/mediatr-min.yml/badge.svg)
-![LINE](https://img.shields.io/badge/line--coverage-86.59%25-brightgreen.svg)
+![LINE](https://img.shields.io/badge/line--coverage-89.29%25-brightgreen.svg)
 ![BRANCH](https://img.shields.io/badge/branch--coverage-62.50%25-yellow.svg)
-![COMPLEXITY](https://img.shields.io/badge/complexity-1.78-brightgreen.svg)
+![COMPLEXITY](https://img.shields.io/badge/complexity-1.75-brightgreen.svg)
 
 The Spring MediatR Library is a simple implementation of the [MediatR](https://github.com/jbogard/MediatR) pattern for
 Spring applications, designed for versions above 2.7.14. It facilitates efficient communication between components in a
@@ -18,6 +18,12 @@ Spring application by providing a mediator pattern implementation.
 
 * Java 11+
 * Spring Framework 5/ Spring Boot 2*
+
+## Note
+
+*Presently, all the methods defined in the `Mediator`, `CommandHandler`, `QueryHandler`, and `NotificationHandler`
+interfaces operate synchronously. However, it is important to note that asynchronous methods will be introduced in the
+near future.*
 
 ## Getting Started
 
@@ -145,5 +151,85 @@ public class SimpleQueryController {
 * Upon calling the GET endpoint, you will receive the response: ```"Hello Anirudh"```.
 * The same process can be applied in case of a ```Command```. For every command there is a ```CommandHandler```.
 
+## Events and Notification Handler
 
+Just like query and command, We can also emit ```Event``` which can then be handled by a ```NotificationHandler```.
+Some of the use-cases can be:
 
+* Send notification's in various forms such as email, push-notification, messaging queue and soon
+* Trigger some background work.(Synchronously for now!!)
+
+Let's look into an example. We will be using the same ```SimpleQueryHandler``` to emit some events.
+
+### 1. Event Creation
+
+* Let's create a Event class called ```SimpleEvent```. This will implement the ```Event``` interface.
+
+```java
+package com.example.event;
+
+import com.anirudh.springmediatr.core.notification.Event;
+import lombok.Data;
+
+@Data
+public class SimpleEvent implements Event {
+    private String message;
+}
+```
+
+### 2. Notification Handler
+
+* Once we are done creating the event, we can proceed with the handler. To create a handler, we will be using
+  ```NotificationHandler```. Let's create one called ```SimpleNotificationHandler```
+
+*In contrast to the limitations placed on the count of `CommandHandlers` and `QueryHandlers`, there exist no restrictions on
+the number of NotificationHandlers that can be employed*
+
+```java
+package com.example.notification;
+
+import com.anirudh.springmediatr.core.notification.NotificationHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
+
+@Component
+public class SimpleNotificationHandler implements NotificationHandler<SimpleNotification> {
+  private static final Logger log = LoggerFactory.getLogger(Simple2NotificationHandler.class);
+  @Override
+  public void handle(SimpleNotification event) {
+    log.info("Simple notification called: {}",event.getMessage()); //Simple log message. The actual implementation may vary depending on the use-case
+  }
+}
+```
+
+### 3. Invoke the handler
+* To publish an event, we will be injecting the mediator instance to our ```SimpleQueryHandler``` which we created before.
+```java
+package com.example;
+
+import com.anirudh.springmediatr.core.mediatr.QueryHandler;
+import com.example.SimpleQuery;
+import org.springframework.stereotype.Component;
+
+@Component
+public class SimpleQueryHandler implements QueryHandler<SimpleQuery, String> {
+    
+    private final Mediator mediator;
+    
+    public SimpleQueryHandler(Mediator mediator){
+        this.mediator = mediator; // Injecting the mediator instance
+    }
+
+    @Override
+    public String handleQuery(SimpleQuery query) {
+        String response =  "Hello" + query.getName();
+        SimpleEvent event = new SimpleEvent(); //Create the event object
+        event.setMessage("Sending event");
+        mediator.publish(event); //Invoke the handler by calling publish.
+        return response;
+    }
+}
+```
+
+*The invocation sequence of handlers lacks a predefined order, leading to randomness that could potentially be perplexing. A solution to this predicament involves establishing a specific order in which the handlers will be executed.*
