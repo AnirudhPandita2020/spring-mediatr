@@ -1,4 +1,4 @@
-package com.anirudh.springmediatr.spring.normal;
+package com.anirudh.springmediatr.spring.normal.query;
 
 import com.anirudh.springmediatr.core.mediatr.Query;
 
