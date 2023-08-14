@@ -1,10 +1,12 @@
 package com.anirudh.springmediatr.core.exception;
 
-import com.anirudh.springmediatr.core.mediatr.RequestHandler;
+
+import com.anirudh.springmediatr.core.mediatr.CommandHandler;
+import com.anirudh.springmediatr.core.mediatr.QueryHandler;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * Exception indicating that no {@link RequestHandler} was found for a specific request class.
+ * Exception indicating that no {@link CommandHandler} or {@link QueryHandler} was found for a specific request class.
  * This exception is typically thrown when attempting to retrieve a handler for a request
  * class, but no appropriate handler is registered in the system.
  *

@@ -1,14 +1,16 @@
 package com.anirudh.springmediatr.core.registry;
 
+
 import com.anirudh.springmediatr.core.exception.NoHandlerFoundException;
-import com.anirudh.springmediatr.core.exception.NoUniqueHandlerException;
-import com.anirudh.springmediatr.core.mediatr.Request;
-import com.anirudh.springmediatr.core.mediatr.RequestHandler;
+import com.anirudh.springmediatr.core.mediatr.Command;
+import com.anirudh.springmediatr.core.mediatr.CommandHandler;
+import com.anirudh.springmediatr.core.mediatr.Query;
+import com.anirudh.springmediatr.core.mediatr.QueryHandler;
 import org.springframework.stereotype.Component;
 
 /**
- * Contract for a Mediatr Registry. This contract specifies how to retrieve a {@link RequestHandler}
- * which will be used to process the given {@link Request}.
+ * Contract for a Mediatr Registry. This contract specifies how to retrieve a {@link CommandHandler}, {@link com.anirudh.springmediatr.core.mediatr.QueryHandler}
+ * which will be used to process the given {@link Command} ,{@link Query}
  * <p>
  * The purpose of this registry is to maintain track of all available handlers within the Spring context.
  * Handlers annotated with {@link Component} will be accessible within
@@ -21,22 +23,27 @@ import org.springframework.stereotype.Component;
  */
 public interface MediatorRegistry {
     /**
-     * Retrieves a {@link RequestHandler} based on the provided request class.
+     * Retrieves a {@link CommandHandler} based on the provided request class.
      *
      * @param <C>          The type of the request class
-     * @param <R>          The response type of the request
      * @param requestClass The class of the request for which to retrieve the handler
      * @return The corresponding request handler
+     * @throws NoHandlerFoundException If no appropriate query handler is found for the given command class.
      */
-    <C extends Request<R>, R> RequestHandler<C, R> getHandler(Class<? extends C> requestClass);
+    <C extends Command> CommandHandler<C> getCommandHandler(Class<? extends C> requestClass) throws NoHandlerFoundException;
+
 
     /**
-     * Configures and initializes request handlers during application startup.
+     * Retrieves a query handler for a specific query class.
      *
-     * @throws NoHandlerFoundException  If no handler is found for a request type
-     * @throws NoUniqueHandlerException If multiple handlers are found for the same request type
+     * @param <Q>        The type of query for which a handler is sought.
+     * @param <R>        The type of response produced by the query handler.
+     * @param queryClass The class of the query for which a handler is requested.
+     * @return The query handler instance capable of handling the specified query class.
+     * @throws NoHandlerFoundException If no appropriate query handler is found for the given query class.
      */
-    void configureHandlers() throws NoHandlerFoundException, NoUniqueHandlerException;
+    <Q extends Query<R>, R> QueryHandler<Q, R> getQueryHandler(Class<? extends Q> queryClass) throws NoHandlerFoundException;
+
 
     /**
      * Clears all registered request handlers during application shutdown.

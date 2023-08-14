@@ -1,0 +1,24 @@
+name: MediatR CI Pipeline
+
+on:
+  pull_request:
+    branches:
+      - '*'
+
+jobs:
+  build:
+    name: Build and Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: 11
+      - name: Build with Gradle
+        run: ./gradlew build --info
+
+      - name: Run tests
+        run: ./gradlew test --info

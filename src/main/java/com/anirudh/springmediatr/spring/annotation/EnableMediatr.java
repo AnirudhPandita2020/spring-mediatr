@@ -1,5 +1,6 @@
-package com.anirudh.springmediatr.core;
+package com.anirudh.springmediatr.spring.annotation;
 
+import com.anirudh.springmediatr.spring.SpringMediatrConfiguration;
 import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.ElementType;

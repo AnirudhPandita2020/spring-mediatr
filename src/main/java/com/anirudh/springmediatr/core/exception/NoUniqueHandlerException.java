@@ -1,11 +1,13 @@
 package com.anirudh.springmediatr.core.exception;
 
-import com.anirudh.springmediatr.core.mediatr.RequestHandler;
+
+import com.anirudh.springmediatr.core.mediatr.CommandHandler;
+import com.anirudh.springmediatr.core.mediatr.QueryHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Primary;
 
 /**
- * Exception indicating that no unique {@link RequestHandler} was found for a specific request class.
+ * Exception indicating that no unique {@link CommandHandler} or {@link QueryHandler} was found for a specific request class.
  * This exception is thrown when attempting to retrieve a handler for a request class,
  * but multiple handlers are registered for the same request type.
  * To avoid such a scenario, it's best to have 1 handler or mark the required handler with {@link Primary}.
