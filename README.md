@@ -13,8 +13,8 @@ Spring application by providing a mediator pattern implementation.
 
 ## Requirements
 
-* Java 11+
-* Spring Framework 5/ Spring Boot 2*
+* Java 17+
+* Spring Framework 6/ Spring Boot 3*
 
 ## Getting Started
 
