@@ -13,10 +13,13 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
+
       - name: Set up JDK
         uses: actions/setup-java@v2
         with:
           java-version: 11
+          distribution: temurin
+
       - name: Build with Gradle
         run: ./gradlew build --info
 
