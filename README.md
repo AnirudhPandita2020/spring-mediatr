@@ -29,11 +29,21 @@ near future.*
 
 ### Gradle
 
-    This is will be availiable once the artificat is published.
+```gradle
+dependencies{
+    implementation "com.anirudh:spring-mediatr:1.0.0"
+}
+```
 
 ### Maven
 
-    This is will be availiable once the artificat is published.
+```maven
+<dependency>
+  <groupId>com.anirudh</groupId>
+  <artifactId>spring-mediatr</artifactId>
+  <version>1.0.0</version>
+</dependency>
+```
 
 ### Jar Setup
 
