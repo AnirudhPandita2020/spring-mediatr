@@ -36,7 +36,7 @@ publishing {
             url = uri("https://maven.pkg.github.com/AnirudhPandita2020/spring-mediatr")
             credentials {
                 username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_ACTOR")
-                password = project.findProperty("gpr.key") ?: System.getenv("JAVA_PUBLISH_TOKEN")
+                password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
             }
         }
     }
