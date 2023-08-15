@@ -1,4 +1,4 @@
-package com.anirudh.springmediatr.spring;
+package com.anirudh.springmediatr.core.spring;
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -13,6 +13,6 @@ import org.springframework.context.annotation.Configuration;
  * @since 1.0
  */
 @Configuration
-@ComponentScan(basePackages = {"com.anirudh.springmediatr"})
+@ComponentScan(basePackages = {"com.anirudh.springmediatr.core"})
 public class SpringMediatrConfiguration {
 }

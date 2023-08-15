@@ -1,4 +1,4 @@
-package com.anirudh.springmediatr.spring.normal.command;
+package com.anirudh.springmediatr.normal.command;
 
 import com.anirudh.springmediatr.core.mediatr.CommandHandler;
 import org.springframework.stereotype.Component;

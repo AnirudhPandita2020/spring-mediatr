@@ -1,10 +1,10 @@
-package com.anirudh.springmediatr.spring.normal;
+package com.anirudh.springmediatr.normal;
 
-import com.anirudh.springmediatr.spring.annotation.EnableMediatr;
+import com.anirudh.springmediatr.core.spring.annotation.EnableMediatr;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = {"com.anirudh.springmediatr.normal"})
 @EnableMediatr
 public class SpringMediatRTestApplication {
     public static void main(String[] args) {
