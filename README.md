@@ -1,9 +1,9 @@
 # Spring MediatR Library
 
 ![](https://github.com/AnirudhPandita2020/spring-mediatr/actions/workflows/mediatr-min.yml/badge.svg)
-![LINE](https://img.shields.io/badge/line--coverage-89.29%25-brightgreen.svg)
-![BRANCH](https://img.shields.io/badge/branch--coverage-62.50%25-yellow.svg)
-![COMPLEXITY](https://img.shields.io/badge/complexity-1.75-brightgreen.svg)
+![LINE](https://img.shields.io/badge/line--coverage-92.11%25-brightgreen.svg)
+![BRANCH](https://img.shields.io/badge/branch--coverage-68.75%25-yellow.svg)
+![COMPLEXITY](https://img.shields.io/badge/complexity-1.62-brightgreen.svg)
 
 The Spring MediatR Library is a simple implementation of the [MediatR](https://github.com/jbogard/MediatR) pattern for
 Spring applications, designed for versions above 2.7.14. It facilitates efficient communication between components in a
@@ -163,7 +163,7 @@ Let's look into an example. We will be using the same ```SimpleQueryHandler``` t
 
 ### 1. Event Creation
 
-* Let's create a Event class called ```SimpleEvent```. This will implement the ```Event``` interface.
+* Let's create an Event class called ```SimpleEvent```. This will implement the ```Event``` interface.
 
 ```java
 package com.example.event;

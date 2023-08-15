@@ -1,4 +1,4 @@
-package com.anirudh.springmediatr.spring;
+package com.anirudh.springmediatr.core.spring;
 
 
 import com.anirudh.springmediatr.core.mediatr.*;

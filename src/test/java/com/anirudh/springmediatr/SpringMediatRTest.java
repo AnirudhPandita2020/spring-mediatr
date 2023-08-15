@@ -3,12 +3,12 @@ package com.anirudh.springmediatr;
 
 import com.anirudh.springmediatr.core.exception.NoHandlerFoundException;
 import com.anirudh.springmediatr.core.mediatr.Mediator;
-import com.anirudh.springmediatr.spring.normal.command.SampleDatabase;
-import com.anirudh.springmediatr.spring.normal.command.SimpleCommand;
-import com.anirudh.springmediatr.spring.normal.command.SimpleCommand2;
-import com.anirudh.springmediatr.spring.normal.query.SimpleQuery;
-import com.anirudh.springmediatr.spring.normal.query.SimpleQuery2;
-import com.anirudh.springmediatr.spring.normal.SpringMediatRTestApplication;
+import com.anirudh.springmediatr.normal.command.SampleDatabase;
+import com.anirudh.springmediatr.normal.command.SimpleCommand;
+import com.anirudh.springmediatr.normal.command.SimpleCommand2;
+import com.anirudh.springmediatr.normal.query.SimpleQuery;
+import com.anirudh.springmediatr.normal.query.SimpleQuery2;
+import com.anirudh.springmediatr.normal.SpringMediatRTestApplication;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

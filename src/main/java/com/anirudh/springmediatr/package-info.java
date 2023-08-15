@@ -5,7 +5,6 @@
  *
  * @author Anirudh Pandita
  * @see com.anirudh.springmediatr.core
- * @see com.anirudh.springmediatr.spring
  * @since 1.0
  */
 package com.anirudh.springmediatr;

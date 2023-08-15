@@ -1,4 +1,4 @@
-package com.anirudh.springmediatr.spring;
+package com.anirudh.springmediatr.core.spring;
 
 
 import com.anirudh.springmediatr.core.exception.NoHandlerFoundException;
@@ -89,73 +89,76 @@ class SpringMediatorRegistry implements MediatorRegistry {
     private void loadQueryHandlers() {
         log.info("MediatR Command Handlers: Scanning for handlers");
         var commandHandlers = context.getBeanNamesForType(CommandHandler.class);
-        if (commandHandlers.length > 0) {
-            log.info("MediatR Command Handlers: Scanned and found {} handlers.Initializing...", commandHandlers.length);
-            Arrays.stream(commandHandlers).forEach(command -> {
-                var handler = (CommandHandler<? extends Command>) context.getBean(command);
-                var genericsType = GenericTypeResolver.resolveTypeArguments(handler.getClass(), CommandHandler.class);
-                if (genericsType != null) {
-                    var requestType = (Class<? extends Command>) genericsType[0];
-                    if (commandRegistry.containsKey(requestType)) {
-                        throw new NoUniqueHandlerException(requestType.getCanonicalName());
-                    }
-                    commandRegistry.put(requestType, handler);
-                }
-            });
-            log.info("MediatR Command Handlers: {} Handlers initialization success.", commandHandlers.length);
+        if (commandHandlers.length == 0) {
+            log.info("MediatR Command Handlers: Scanned and found 0 handlers");
             return;
         }
-        log.info("MediatR Command Handlers: Scanned and found 0 handlers");
+        log.info("MediatR Command Handlers: Scanned and found {} handlers.Initializing...", commandHandlers.length);
+        Arrays.stream(commandHandlers).forEach(command -> {
+            var handler = (CommandHandler<? extends Command>) context.getBean(command);
+            var genericsType = GenericTypeResolver.resolveTypeArguments(handler.getClass(), CommandHandler.class);
+            if (genericsType != null) {
+                var requestType = (Class<? extends Command>) genericsType[0];
+                if (commandRegistry.containsKey(requestType)) {
+                    throw new NoUniqueHandlerException(requestType.getCanonicalName());
+                }
+                commandRegistry.put(requestType, handler);
+            }
+        });
+        log.info("MediatR Command Handlers: {} Handlers initialization success.", commandHandlers.length);
     }
 
     @SuppressWarnings("unchecked")
     private void loadCommandHandlers() throws NoUniqueHandlerException {
         log.info("MediatR Query Handlers: Scanning for handlers");
         var queryHandlers = context.getBeanNamesForType(QueryHandler.class);
-        if (queryHandlers.length > 0) {
-            log.info("MediatR Query Handlers: Scanned and found {} handlers.Initializing...", queryHandlers.length);
-            Arrays.stream(queryHandlers).forEach(query -> {
-                var handler = (QueryHandler<? extends Query<?>, ?>) context.getBean(query);
-                var genericsType = GenericTypeResolver.resolveTypeArguments(handler.getClass(), QueryHandler.class);
-                if (genericsType != null) {
-                    var requestType = (Class<? extends Query<?>>) genericsType[0];
-                    if (queryRegistry.containsKey(requestType)) {
-                        throw new NoUniqueHandlerException(requestType.getCanonicalName());
-                    }
-                    queryRegistry.put(requestType, handler);
-                }
-            });
-            log.info("MediatR Query Handlers: {} Handlers initialization success.", queryHandlers.length);
+        if (queryHandlers.length == 0) {
+            log.info("MediatR Query Handlers: Scanned and found 0 handlers");
             return;
         }
-        log.info("MediatR Query Handlers: Scanned and found 0 handlers");
+        log.info("MediatR Query Handlers: Scanned and found {} handlers.Initializing...", queryHandlers.length);
+        Arrays.stream(queryHandlers).forEach(query -> {
+            var handler = (QueryHandler<? extends Query<?>, ?>) context.getBean(query);
+            var genericsType = GenericTypeResolver.resolveTypeArguments(handler.getClass(), QueryHandler.class);
+            if (genericsType != null) {
+                var requestType = (Class<? extends Query<?>>) genericsType[0];
+                if (queryRegistry.containsKey(requestType)) {
+                    throw new NoUniqueHandlerException(requestType.getCanonicalName());
+                }
+                queryRegistry.put(requestType, handler);
+            }
+        });
+        log.info("MediatR Query Handlers: {} Handlers initialization success.", queryHandlers.length);
+
     }
 
     @SuppressWarnings("unchecked")
     private void loadNotificationHandlers() {
         log.info("MediatR Notification Handlers: Scanning for handlers");
         var notificationHandlers = context.getBeanNamesForType(NotificationHandler.class);
-        if (notificationHandlers.length > 0) {
-            log.info("MediatR Notification Handlers: Scanned and found {} handlers. Initializing...", notificationHandlers.length);
-            Arrays.stream(notificationHandlers).forEach(notification -> {
-                var handler = (NotificationHandler<?>) context.getBean(notification);
-                var genericType = GenericTypeResolver.resolveTypeArguments(handler.getClass(), NotificationHandler.class);
-                if (genericType != null) {
-                    var eventType = (Class<? extends Event>) genericType[0];
-                    if (notificationRegistry.containsKey(eventType)) {
-                        notificationRegistry.get(eventType).add(handler);
-                    } else {
-                        notificationRegistry.put(eventType, new HashSet<>() {
-                            {
-                                add(handler);
-                            }
-                        });
-                    }
-                    log.info("MediatR Notification Handlers: Added {} for event {}", handler.getClass().getSimpleName(), eventType.getSimpleName());
-                }
-            });
+        if (notificationHandlers.length == 0) {
+            log.info("MediatR Notification Handlers: Scanned and found 0 handlers");
+            return;
         }
-        log.info("MediatR Notification Handlers: Scanned and found 0 handlers");
+        log.info("MediatR Notification Handlers: Scanned and found {} handlers. Initializing...", notificationHandlers.length);
+        Arrays.stream(notificationHandlers).forEach(notification -> {
+            var handler = (NotificationHandler<?>) context.getBean(notification);
+            var genericType = GenericTypeResolver.resolveTypeArguments(handler.getClass(), NotificationHandler.class);
+            if (genericType != null) {
+                var eventType = (Class<? extends Event>) genericType[0];
+                if (notificationRegistry.containsKey(eventType)) {
+                    notificationRegistry.get(eventType).add(handler);
+                } else {
+                    notificationRegistry.put(eventType, new HashSet<>() {
+                        {
+                            add(handler);
+                        }
+                    });
+                }
+                log.info("MediatR Notification Handlers: Added {} for event {}", handler.getClass().getSimpleName(), eventType.getSimpleName());
+            }
+        });
+
     }
 
     @Override
@@ -164,6 +167,7 @@ class SpringMediatorRegistry implements MediatorRegistry {
             log.info("Initiating MediatR Shutdown: Cleaning Up All Handlers.");
             commandRegistry.clear();
             queryRegistry.clear();
+            notificationRegistry.clear();
             log.info("MediatR shutdown successful: Cleared all handlers");
         }
     }
