@@ -1,16 +1,14 @@
-import javax.xml.parsers.DocumentBuilderFactory
-
 plugins {
     id 'java-library'
+    id 'maven-publish'
     id 'jacoco'
     id 'com.github.dawnwords.jacoco.badge' version '0.2.4'
     id 'org.springframework.boot' version '3.1.2'
     id 'io.spring.dependency-management' version '1.1.2'
-    id 'org.jetbrains.kotlinx.kover' version "0.7.3"
 }
 
 group = 'com.anirudh'
-version = '0.0.3-SNAPSHOT'
+version = '1.0.0'
 
 java {
     sourceCompatibility = '17'
@@ -29,6 +27,24 @@ jar {
 
 repositories {
     mavenCentral()
+}
+
+publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/AnirudhPandita2020/spring-mediatr")
+            credentials {
+                username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
+                password = project.findProperty("gpr.key") ?: System.getenv("TOKEN")
+            }
+        }
+    }
+    publications {
+        gpr(MavenPublication) {
+            from(components.java)
+        }
+    }
 }
 
 dependencies {
