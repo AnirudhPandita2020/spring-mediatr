@@ -42,7 +42,7 @@ publishing {
     }
     publications {
         gpr(MavenPublication) {
-            artifactId = 'anirudh-spring-mediatr'
+            artifactId = 'spring-mediatr'
             from(components.java)
         }
     }
